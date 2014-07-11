@@ -1,5 +1,6 @@
 require "rpdf/version"
 require "savon"
+require 'lib/rpdf/concerns/models/xml_serializable'
 
 module Intersail
   module Rpdf
