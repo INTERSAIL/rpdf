@@ -6,16 +6,24 @@ module Intersail
 
       included do
         cattr_accessor :xml_include_fields
+        cattr_accessor :xml_methods_fields
+
+        self.xml_include_fields = []
+        self.xml_methods_fields = []
       end
 
 
       module ClassMethods
         def xml_include(*fields)
-          self.xml_include_fields = fields
+          fields.each { |f| self.xml_include_fields << f }
+        end
+        def xml_methods(*fields)
+          fields.each { |f| self.xml_methods_fields << f }
         end
       end
 
       def to_xml(options = {})
+        method_options = options.delete(:methods) || []
         include_options = options.delete(:include) || []
         exclude_options = options.delete(:exclude)
 
@@ -34,7 +42,10 @@ module Intersail
           end
         end
 
-        super_options = options.merge({include: include})
+        methods = self.class.xml_methods_fields << method_options
+        methods = methods.flatten.compact.uniq
+
+        super_options = options.merge({include: include, methods: methods})
 
         super(super_options)
       end
