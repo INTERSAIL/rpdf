@@ -10,12 +10,10 @@ module Intersail
         @ws = Savon.client(wsdl: "#{address}?wsdl")
       end
 
-      def make_pdf_with_local_file(templateFile, data, options = {} )
-        include_options = options.delete(:include) || []
-
+      def make_pdf_with_local_file(templateFile, data, options = {})
         templateData = Base64.encode64(File.read(templateFile))
 
-        response = @ws.call(:make_pdf_with_xml, message: { data: templateData, xmlTags: data.to_xml(include: include_options) })
+        response = @ws.call(:make_pdf_with_xml, message: { data: templateData, xmlTags: data.to_xml(options) })
 
         return nil unless response
 
