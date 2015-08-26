@@ -21,6 +21,17 @@ module Intersail
 
         Base64.decode64(pdfData)
       end
+
+      def get_template_tags(templateFile)
+        templateData = Base64.encode64(File.read(templateFile))
+
+        response = @ws.call(:get_template_tags, message: { data: templateData })
+
+        return nil unless response
+
+        tags = response.body[:get_template_tags_response][:get_template_tags_result]
+        tags
+      end
     end
   end
 end
