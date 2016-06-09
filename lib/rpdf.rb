@@ -7,7 +7,12 @@ module Intersail
     class ZapPdfClient
 
       def initialize(address)
+        @url = address
         @ws = Savon.client(wsdl: "#{address}?wsdl")
+      end
+
+      def url
+        @url
       end
 
       def make_pdf_with_local_file(templateFile, data, options = {})
